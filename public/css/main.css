@@ -1,0 +1,22 @@
+body,
+h4,
+h2{
+  color: white;
+  background-color:black;
+}
+
+
+.title,
+.tag
+{
+  color: white;
+  text-align: center;
+}
+
+
+
+span.digit{
+  font-weight: 700;
+  font-size: 2em;
+  padding: 0px 20px;
+}
