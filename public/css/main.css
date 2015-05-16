@@ -1,6 +1,7 @@
 body,
-.title h2,
-.tag h4{
+h1,
+h4,
+label{
   color: white;
   background-color:black;
   text-align:center;
@@ -9,7 +10,7 @@ body,
 
 #header,
 #footer{
-  padding: 20px;
+  padding: 30px;
 }
 
 button{

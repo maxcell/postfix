@@ -9,23 +9,27 @@
     <script src="https://fb.me/JSXTransformer-0.13.3.js"></script>
   </head>
   <body>
-    <div id="header">
-      <div class="title">
-        <h2>Welcome!</h2>
-      </div>
-      <div class="tag">
-        <h4>This is a website devoted to helping you learn postfix and
-          infix expressions</h4>
+    <div class ="row">
+      <div class="large-12 columns">
+
+        <div id="header">
+            <h1>Welcome!</h1>
+            <h4>This is a website devoted to helping you
+                learn postfix and infix expressions. Please
+                make sure to put in values (natural numbers).
+            </h4>
+        </div>
+
+        <label>Infix Input
+          <div id="app"></div>
+        </label>
+
+      <a class="button" onClick="test()">Submit</a>
+      <div id="footer">
+        Maxcell Wilson © 2015
       </div>
     </div>
-
-
-
-    <div id="app"></div>
-    <butt onClick="test()">Submit</button>
-    <div id="footer">
-      Maxcell Wilson © 2015
-    </div>
+  </div>
 
     <script>
       function test(){
@@ -69,7 +73,7 @@
       var Infix = React.createClass({
 
         getInitialState: function(){
-          return {value: 'Enter valid Infix expression'};
+          return {value: ''};
         },
 
         handleChange: function(event){
@@ -78,7 +82,7 @@
 
         render: function(){
           var value = this.state.value;
-          return <input id="infix" type="text" value={value} onChange={this.handleChange}/>;
+          return <input id="infix" type="text" placeholder="Enter text" value={value} onChange={this.handleChange}/>;
         }
       });
 
