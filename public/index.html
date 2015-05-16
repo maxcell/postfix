@@ -9,63 +9,132 @@
     <script src="https://fb.me/JSXTransformer-0.13.3.js"></script>
   </head>
   <body>
-    <div class="title">
-      <h2>Welcome!</h2>
+    <div id="header">
+      <div class="title">
+        <h2>Welcome!</h2>
+      </div>
+      <div class="tag">
+        <h4>This is a website devoted to helping you learn postfix and
+          infix expressions</h4>
+      </div>
     </div>
-    <div class="tag">
-      <h4>This is a website devoted to helping you learn postfix and
-        infix expressions</h4>
-    </div>
+
+
+
     <div id="app"></div>
+    <butt onClick="test()">Submit</button>
+    <div id="footer">
+      Maxcell Wilson © 2015
+    </div>
+
+    <script>
+      function test(){
+        var userInput = document.getElementById("infix").value;
+        if(userInput === "Enter valid Infix expression"){
+          userInput = "Change the value!";
+        } else if(userInput === null){
+          userInput = "Failed to initialize";
+        } else {
+          if(!validate(userInput)){
+            output("Invalid entry");
+          } else{
+            output(postfix(userInput));
+          }
+        }
+
+      }
+
+      function validate(userInput){
+        var paren = 0;
+        var result = true;
+          if(userInput === ""){
+            result = false;
+          }
+
+        return result;
+      }
+
+      function postfix(userInput){
+        return userInput;
+      }
+
+
+      function output(userInput){
+        console.log(userInput);
+      }
+    </script>
 
     <script type="text/jsx">
 
-      var Digit = React.createClass({
-
-        render: function(){
-          return (
-
-            <span className='digit'>
-              {this.props.letter}
-            </span>
-          );
-        }
-      });
-
       var Infix = React.createClass({
 
+        getInitialState: function(){
+          return {value: 'Enter valid Infix expression'};
+        },
+
+        handleChange: function(event){
+          this.setState({value: event.target.value});
+        },
+
         render: function(){
-          var letters = this.props.letters.map(function(letter) {
-            return <Digit key={letter.key} letter={letter.char} />
-          });
-
-          return (
-            <div className='infix'>
-              {letters}
-            </div>
-          );
+          var value = this.state.value;
+          return <input id="infix" type="text" value={value} onChange={this.handleChange}/>;
         }
-
       });
 
+      React.render(<Infix />, document.getElementById("app"));
 
-      var data = [
-        {
-          key: 'A',
-          char: 'A'
-        },
-        {
-          key: 'B',
-          char: 'B'
-        },
-        {
-          key: 'C',
-          char: 'C'
-        }
-      ]
 
-      React.render(<Infix letters={data}/>,
-                    document.getElementById("app"));
+
+
+
+      //
+      // var Digit = React.createClass({
+      //
+      //   render: function(){
+      //     return (
+      //
+      //       <span className='digit'>
+      //         {this.props.letter}
+      //       </span>
+      //     );
+      //   }
+      // });
+      //
+      // var Infix = React.createClass({
+      //
+      //   render: function(){
+      //     var letters = this.props.letters.map(function(letter) {
+      //       return <Digit key={letter.key} letter={letter.char} />
+      //     });
+      //
+      //     return (
+      //       <div className='infix'>
+      //         {letters}
+      //       </div>
+      //     );
+      //   }
+      //
+      // });
+      //
+      //
+      // var data = [
+      //   {
+      //     key: 'A',
+      //     char: 'A'
+      //   },
+      //   {
+      //     key: 'B',
+      //     char: 'B'
+      //   },
+      //   {
+      //     key: 'C',
+      //     char: 'C'
+      //   }
+      // ]
+      //
+      // React.render(<Infix letters={data}/>,
+      //               document.getElementById("app"));
 
 
     </script>
