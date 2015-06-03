@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>Computer Science</title>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <link rel="stylesheet" href="./css/foundation.min.css">
     <link rel="stylesheet" href="./css/main.css">
     <script src="//fb.me/react-with-addons-0.13.3.js"></script>
@@ -24,56 +24,127 @@
           <div id="app"></div>
         </label>
 
-      <a class="button" onClick="test()">Submit</a>
       <div id="footer">
         Maxcell Wilson © 2015
       </div>
     </div>
   </div>
 
-    <script>
-      function test(){
-        var userInput = document.getElementById("infix").value;
-        if(userInput === "Enter valid Infix expression"){
-          userInput = "Change the value!";
-        } else if(userInput === null){
-          userInput = "Failed to initialize";
-        } else {
-          if(!validate(userInput)){
-            output("Invalid entry");
-          } else{
-            output(postfix(userInput));
-          }
-        }
-
-      }
-
-      function validate(userInput){
-        var paren = 0;
-        var result = true;
-          if(userInput === ""){
-            result = false;
-          }
-
-        return result;
-      }
-
-      function postfix(userInput){
-        return userInput;
-      }
-
-
-      function output(userInput){
-        console.log(userInput);
-      }
-    </script>
-
     <script type="text/jsx">
 
-      var Infix = React.createClass({
 
+      var Display = React.createClass({
+        render: function(){
+          return (
+          <div>
+            <Infix />
+          </div>
+          );
+        }
+      });
+
+
+      var Infix = React.createClass({
         getInitialState: function(){
           return {value: ''};
+        },
+
+        push: function(stack, value){
+          stack[stack.length] = value;
+        },
+
+        pop: function(stack){
+          var temp = stack[stack.length - 1];
+          delete stack[stack.length - 1];
+          stack.length--;
+          return(temp);
+        },
+
+        isOperand: function(c){
+          return (!this.isOperator(c) && (c !== "(" && c !== ")") ? true : false);
+        },
+
+        isOperator: function(c){
+          return (c ==="+" || c === "-" || c === "*" || c === "/" || c === "^") ? true : false;
+        },
+
+        top: function(stack){
+          return stack[stack.length - 1];
+        },
+
+        isEmpty: function(stack){
+          return (stack.length === 0) ? true : false;
+        },
+
+        prcd: function(c){
+            if( c === "^"){
+              return 5;
+            } else if( c === "*" || c === "/"){
+              return 4;
+            } else if( c === "+" || c === "-"){
+              return 3;
+            } else if( c === "("){
+              return 2;
+            } else if (c === ")"){
+              return 1;
+            }
+        },
+
+        postfix: function(postfixStr){
+          var stack = new Array();
+          var postfixStr = new Array();
+          var valArray = this.state.value.split('');
+
+          var postIndex = 0;
+          for(var i = 0; i < valArray.length; i++){
+            if(this.isOperand(valArray[i])){
+              postfixStr[postIndex] = valArray[i];
+              postIndex++;
+            }
+
+            if(this.isOperator(valArray[i])){
+              while((!this.isEmpty(stack)) && (this.prcd(valArray[i]) <= this.prcd(this.top(stack)))){
+                postfixStr[postIndex] = this.top(stack);
+                this.pop(stack);
+                postIndex++;
+              }
+
+              this.push(stack, valArray[i]);
+            }
+
+            if( valArray[i] === "("){
+              this.push(stack, valArray[i]);
+            }
+
+            if( valArray[i] === ")"){
+              while(this.top(stack) != "("){
+                postfixStr[postIndex] = this.pop(stack);
+                postIndex++;
+              }
+
+              this.pop(stack);
+            }
+          }
+
+          while(!this.isEmpty(stack)){
+            if(this.top(stack) === "("){
+              this.pop(stack);
+            } else {
+              postfixStr[postfixStr.length] = this.pop(stack);
+            }
+          }
+
+          var postFinal = '';
+          for(var i = 0; i < postfixStr.length; i++){
+            postFinal += postfixStr[i];
+          }
+          return postFinal;
+        },
+
+
+        submit: function(event){
+              event.preventDefault();
+              console.log(this.postfix());
         },
 
         handleChange: function(event){
@@ -82,64 +153,17 @@
 
         render: function(){
           var value = this.state.value;
-          return <input id="infix" type="text" placeholder="Enter text" value={value} onChange={this.handleChange}/>;
+         return (
+           <div>
+              {this.state.value}
+              <input id="infix" type="text" placeholder="Enter text" value={value} onChange={this.handleChange}/>
+              <a className="button" onClick={this.submit}>Submit</a>
+          </div>
+            );
         }
       });
 
-      React.render(<Infix />, document.getElementById("app"));
-
-
-
-
-
-      //
-      // var Digit = React.createClass({
-      //
-      //   render: function(){
-      //     return (
-      //
-      //       <span className='digit'>
-      //         {this.props.letter}
-      //       </span>
-      //     );
-      //   }
-      // });
-      //
-      // var Infix = React.createClass({
-      //
-      //   render: function(){
-      //     var letters = this.props.letters.map(function(letter) {
-      //       return <Digit key={letter.key} letter={letter.char} />
-      //     });
-      //
-      //     return (
-      //       <div className='infix'>
-      //         {letters}
-      //       </div>
-      //     );
-      //   }
-      //
-      // });
-      //
-      //
-      // var data = [
-      //   {
-      //     key: 'A',
-      //     char: 'A'
-      //   },
-      //   {
-      //     key: 'B',
-      //     char: 'B'
-      //   },
-      //   {
-      //     key: 'C',
-      //     char: 'C'
-      //   }
-      // ]
-      //
-      // React.render(<Infix letters={data}/>,
-      //               document.getElementById("app"));
-
+      React.render(<Display />, document.getElementById("app"));
 
     </script>
   </body>
