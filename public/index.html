@@ -45,6 +45,11 @@
 
 
       var Infix = React.createClass({
+        getInitialState: function(){
+          return {
+            infixExpression: '',
+          };
+        },
 
         push: function(stack, value){
           stack[stack.length] = value;
@@ -87,10 +92,10 @@
             }
         },
 
-        postfix: function(){
+        convertToPostfix: function(){
           var stack = new Array();
           var postfixStr = new Array();
-          var valArray = this.state.value.split('');
+          var valArray = this.state.infixExpression.split('');
 
           var postIndex = 0;
           for(var i = 0; i < valArray.length; i++){
@@ -138,46 +143,37 @@
           return postFinal;
         },
 
-        getInitialState: function(){
-          return ({value: '', postfix: ''});
-        },
-
-        submit: function(){
-              this.setState({postfix: this.postfix()});
-        },
-
         clearField: function(event){
-            this.setState({value: ''});
-            this.setState({postfix: ''});
+            this.setState({infixExpression: ''});
         },
 
         handleChange: function(event){
-          this.setState({value: event.target.value});
-          this.submit();
+          // Remove all whitespace from the input before storing it in state.
+          var infixExpression = event.target.value.replace(/\s/, '');
+
+          this.setState({infixExpression});
         },
 
-
         render: function(){
-          var value = this.state.value;
-          var postfix = this.state.postfix;
-         return (
-           <div>
-              <input id="infix" type="text" placeholder="Enter text" value={value} onChange={this.handleChange}/>
+          return (
+            <div>
+              <input id="infix" type="text" placeholder="Enter text" onChange={this.handleChange}/>
+
               <div>
-                <a className="button" onClick={this.submit}>Submit</a>
                 <a className="button" onClick={this.clearField}>Clear</a>
               </div>
 
               <h3>Infix Expression</h3>
               <div className="postfix">
-                {value.split('').join(" ")}
+                {this.state.infixExpression.split('').join(' ')}
               </div>
+
               <h3>Postfix Expression</h3>
-            <div className="postfix" postfix={postfix}>
-              {postfix}
+              <div className="postfix">
+                {this.convertToPostfix()}
+              </div>
             </div>
-          </div>
-            );
+          );
         }
       });
 
