@@ -143,25 +143,20 @@
           return postFinal;
         },
 
-        clearField: function(event){
-            this.setState({infixExpression: ''});
-        },
 
         handleChange: function(event){
           // Remove all whitespace from the input before storing it in state.
           var infixExpression = event.target.value.replace(/\s/, '');
 
-          this.setState({infixExpression});
+          // One Day we will get
+          // this.setState{{infixExpression}};
+          this.setState({infixExpression: infixExpression});
         },
 
         render: function(){
           return (
             <div>
               <input id="infix" type="text" placeholder="Enter text" onChange={this.handleChange}/>
-
-              <div>
-                <a className="button" onClick={this.clearField}>Clear</a>
-              </div>
 
               <h3>Infix Expression</h3>
               <div className="postfix">
